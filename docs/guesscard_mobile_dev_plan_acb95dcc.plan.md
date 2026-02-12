@@ -4,7 +4,7 @@ overview: Полный план разработки мобильного при
 todos:
   - id: phase-0
     content: "Phase 0: Bootstrap Expo project, dependencies, project structure, Jest, git init"
-    status: pending
+    status: completed
   - id: phase-1
     content: "Phase 1: Game Engine - types, deck, scoring, streak, probability, joker + unit tests"
     status: pending
