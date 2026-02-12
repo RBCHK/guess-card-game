@@ -10,7 +10,7 @@ todos:
     status: completed
   - id: phase-2
     content: "Phase 2: Zustand stores (game, settings, stats) + MMKV persistence + auto-save"
-    status: pending
+    status: completed
   - id: phase-3
     content: "Phase 3: UI Foundation - theme, Expo Router navigation, main/settings screens"
     status: pending
