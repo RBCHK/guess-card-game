@@ -7,7 +7,7 @@ todos:
     status: completed
   - id: phase-1
     content: "Phase 1: Game Engine - types, deck, scoring, streak, probability, joker + unit tests"
-    status: pending
+    status: completed
   - id: phase-2
     content: "Phase 2: Zustand stores (game, settings, stats) + MMKV persistence + auto-save"
     status: pending
