@@ -1,0 +1,26 @@
+---
+description: "Guess Card game mechanics — scoring (BB), streak multiplier, jokers, deck, probability. Apply when editing game logic or store."
+globs: ["src/lib/game/**/*", "src/store/gameStore.ts", "src/hooks/useGame.ts"]
+alwaysApply: false
+---
+
+# Guess Card — Game Logic
+
+**Source of truth:** `GUESS_CARD_GAME_MOBILE_SPEC_RU.md` sections 5 (Игровая механика) and 6.5–6.6 (types, algorithms).
+
+## Types (lib/game/types.ts)
+
+- `DeckMode`: 36 | 52. `Card`: RegularCard | JokerCard. `GamePhase`: init | loadout | dealing | idle | flipping | showing | joker_activation | banking | discarding | gameOver.
+- `MatchResult`: bb, matchType ('exact'|'rank+color'|'rank'|'suit'|'color'|'miss'), isExactMatch.
+- Scoring **priority**: exact > rank+color > rank > suit > color > miss. BB values: 36 cards — exact 250, rank+color 100, rank 50, suit 25, color 10; 52 cards — exact 500, rank+color 150, rank 75, suit 25, color 10.
+- **Joker:** When revealed, ability runs; streak is NOT broken (no miss). Red = buffer × 1.3. Black = shield for next turn (on miss: buffer kept, multiplier reset to x1).
+
+## Algorithms
+
+- **Deck:** Fisher-Yates shuffle. `createDeck(mode)` → regular cards; `mixInJokers(deck, loadout)` → full deck. Loadout: 1 joker for 36, 2 for 52.
+- **Streak multiplier:** levels 1–10 → x1, x2, x4, x8, x15, x25, x40, x60, x80, x120. Apply to base BB before adding to buffer. Reset on miss or on bank.
+- **Probability:** Only over **remaining regular cards** (exclude jokers). See `calculateProbabilities()` in spec 5.5 / 6.6.4.
+
+## Edge cases (spec 5.8)
+
+- Buffer = 0 → "ЗАФИКСИРОВАТЬ" disabled. Last card = miss → buffer burns, game over. Last card = joker → ability runs, then auto-bank and game over. App close → persist state (MMKV), resume on open. Black joker + bank before next turn → shield lost. Network error on leaderboard → save locally, retry later.

@@ -1,0 +1,35 @@
+---
+description: "Firebase, Supabase, Amplitude, RevenueCat, AdMob. Apply when editing auth, leaderboards, analytics, or monetization."
+globs: ["src/lib/firebase/**/*", "src/lib/supabase/**/*", "**/analytics*", "**/leaderboard*", "**/purchases*", "**/ads*"]
+alwaysApply: false
+---
+
+# Guess Card — Backend & Services
+
+**Architecture (spec 6.3):** Firebase for free services only. Supabase for leaderboards. No Firestore (variable cost).
+
+## Firebase (free only)
+
+- **Remote Config:** Game balance (bb_exact_36/52, streak_multipliers, red_joker_multiplier). Fetch cache 3600s. Use defaults from spec.
+- **Auth:** Anonymous only. Sign in on init if no user.
+- **Crashlytics + Analytics:** From day 1. No Firestore.
+- **Budget alert:** $50/month (Google Cloud Billing).
+
+## Supabase
+
+- **Tables:** `leaderboard_high_scores` (score, match_time_seconds, deck_mode), `leaderboard_total_scores` (total_score, games_played). RLS: read all, insert own; rate limit 1 score per minute.
+- **Client:** Use `safeSupabaseQuery()` with cache key and TTL. On quota/error → return cache, log warning. MMKV for storage adapter.
+- **Budget:** $25/month cap (Supabase dashboard).
+
+## Client safeguards
+
+- **Rate limiter:** 1 leaderboard submit per minute per key (`rateLimiter.check('leaderboard_submit', 1)`).
+- **Monitoring:** Optional `trackAPICall(service)` for firebase/supabase/amplitude.
+
+## Amplitude
+
+- Product analytics (funnels, cohorts, retention). 15–20 critical events from day 1 (spec 9.3).
+
+## Monetization
+
+- **RevenueCat** for IAP (remove_ads, hint_pack_3). **AdMob** for rewarded/interstitial. Webhooks for server events.

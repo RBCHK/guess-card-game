@@ -1,0 +1,17 @@
+---
+description: "React Native, Expo SDK 52, Expo Router, TypeScript. Apply when editing app/, src/, or adding native dependencies."
+globs: ["app/**/*", "src/**/*", "app.json", "eas.json", "package.json"]
+alwaysApply: false
+---
+
+# Guess Card — React Native & Expo
+
+- **Framework:** React Native 0.76+, Expo SDK 52. **Package manager:** pnpm.
+- **Routing:** Expo Router only (file-based). No direct `@react-navigation/stack` — use `app/` and `(tabs)`.
+- **Language:** TypeScript 5.x strict. Components: PascalCase. Hooks: `use*`. Stores: `*Store`. Lib: camelCase.
+- **State:** Zustand for game/settings/stats. No Redux.
+- **Storage:** MMKV for all persistent data (game state, stats, settings). No AsyncStorage — MMKV is sync and 30x faster.
+- **Animations:** react-native-reanimated (no Animated API for new code). Lottie for JSON animations. Card flip: 600ms, perspective 1000.
+- **Audio:** expo-av. **Haptics:** expo-haptics.
+- **Build:** EAS Build + EAS Update. For Firebase/AdMob use **EAS Development Build** (config plugins), not Expo Go.
+- **Structure:** `app/` = routes. `src/components/` = game | loadout | ui | screens | shared. `src/lib/` = game | storage | audio | haptics | utils. `src/store/`, `src/hooks/`, `src/theme/`.
